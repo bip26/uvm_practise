@@ -1,0 +1,74 @@
+UVM provides 4 reporting Macros:
+  i. `uvm_info    ("ID", "Message", Verbosity)
+ ii. `uvm_warning ("ID", "Message")
+iii. `uvm_error   ("ID", "Message")
+ iv. `uvm_fatal   ("ID", "Message")
+
+
+  Example:
+    `uvm_info (get_type_name(), "Transaction Sent", UVM_MEDIUM)
+    `uvm_info (get_full_name(), "Transaction Sent", UVM_MEDIUM)
+    `uvm_info (get_name(), "Transaction Sent", UVM_MEDIUM)
+
+ 
+    Message ID:
+       - Default can be get_type_name(), which will return the class name.
+       - If the the declearation is not inside the class, we can not use get_type_name, then we have to explicitly declear the name.
+       
+    `uvm_info ("top_tb", "Transaction Sent", UVM_MEDIUM)
+   
+
+    Verbosity:
+      - Message with UVM_LOW will have output.
+      - Message with UVM_HIGH will be ignored.
+      - UVM_MEDIUM is the default verbosity, will have output.
+      - There are 6 predefined verbosity:
+           UVM_NONE                    
+           UVM_LOW                     
+           UVM_MEDIUM		Will have output
+        ----------------
+           UVM_HIGH             Will be ignored
+           UVM_FULL                   
+           UVM_DEBUG                  
+
+
+  
+Setting Actions:
+  o set_report_severity_action (UVM_INFO, UVM_LOG);
+      - Any info report generated from the current component will be added into the log file.
+      - Has the lowest priority.
+  o set_report_id_action ("my_env", UVM_LOG | UVM_EXIT);
+      - It lets us to set action with all reports from a particular component have a particular ID. Here the ID is my_env having action as UVM_LOG and UVM_EXIT.
+      - Both UVM_LOG and UVM_EXIT are bit mask.
+      - Has the 2nd Priority
+
+  o set_report_severity_id_action(UVM_INFO,"my_env", UVM_DISPLAY)
+      - Has the Highest Priority
+      
+
+  o In order to set entire component hirerchy we can use:
+    uvm_top.set_report_severity_id_action_hier("my_env",UVM_LOG| UVM_EXIT);
+
+
+   Severity                     Default Action
+   uvm_info        ->           UVM_DISPLAY
+   uvm_warning     ->           UVM_DISPLAY
+   uvm_error       ->           UVM_DISPLAY | UVM_COUNT
+   uvm_fatal       ->           UVM_DISPLAY | UVM_EXIT
+   
+
+
+ There are seven built-in action are:
+  o UVM_NO_ACTION: supress other action
+  o UVM_DISPLAY:   Standar output
+  o UVM_LOG:       Redirect to log file
+  o UVM_COUNT:     Abort simulation on reaching max quit count
+  o UVM_EXIT:      Abort Simulation
+  o UVM_STOP:      Call $stop
+  o UVM_RM_RECORD: Send report to the uvm recorder
+
+ NOTE:
+  - We can set maximum quite_count by calling set_max_quite_count methode.
+  - 
+
+
